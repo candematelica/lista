@@ -18,3 +18,12 @@ type Lista[T any] interface {
 	//iterador externo
 	Iterador() IteradorLista[T]
 }
+
+type IteradorLista[T any] interface {
+	VerActual() T
+	HaySiguiente() bool
+	Siguiente()
+	Insertar(T)
+	Borrar() T
+}
+
