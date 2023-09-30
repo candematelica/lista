@@ -21,7 +21,7 @@ func crearNodo[T any](dato T) *nodoLista[T]{
 	return &nodoLIsta[T]{dato: dato, prox: nil}
 }
 
-func (lista *listaEnlazada[T])[T any]EstaVacia() bool {
+func (lista *listaEnlazada[T])EstaVacia[T any]() bool {
 	return lista.primero == nil 
 }
 
