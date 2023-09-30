@@ -44,6 +44,10 @@ func (lista *listaEnlazada[T])InsertarUltimo[T any](elem T){
 		lista.primero = nodoNuevo
 	}
 
+	//Acá arriba no habría que agregar:
+	//lista.ultimo := ante_ultimo
+	//ante_ultimo.siguiente = nodoNuevo
+	//??
 	lista.ultimo = nodoNuevo
 	lista.largo ++
 }
