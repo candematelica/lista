@@ -87,7 +87,7 @@ func (lista listaEnlazada[T])Largo[T any]() int{
 	return lista.largo
 }
 
-func (lista listaEnlazada[T])Iterador[T any](visitar func(T) bool){
+func (lista listaEnlazada[T])Iterar[T any](visitar func(T) bool){
 	nodoActual := lista.primero
 
 	for nodoActual != nil{
