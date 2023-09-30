@@ -20,28 +20,56 @@ func TestInsertarYBorrarVariosElementosNumericos(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	lista.InsertarPrimero(3)
-	require.EqualValues(t, 3, lista.VerPrimero(), "Los elementos numericos se insertan correctamente al principio")
+	require.EqualValues(t, 3, lista.VerPrimero(), "En una lista vacia, los elementos numericos se insertan correctamente al principio")
+	require.EqualValues(t, 3, lista.VerUltimo())
 	require.EqualValues(t, 1, lista.Largo(), "Luego de insertar un elemento, el largo aumenta")
 	lista.InsertarUltimo(-1)
+	require.EqualValues(t, 3, lista.VerPrimero())
 	require.EqualValues(t, -1, lista.VerUltimo(), "Los elementos numericos se insertan correctamente al final")
 	require.EqualValues(t, 2, lista.Largo())
-	lista.InsertarUltimo(0)
-	require.EqualValues(t, 0, lista.VerUltimo(), "Los elementos numericos se insertan correctamente al final")
+	lista.InsertarPrimero(0)
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
 	require.EqualValues(t, 3, lista.Largo())
 
 	require.False(t, lista.EstaVacia())
 
 	lista.BorrarPrimero()
-	require.EqualValues(t, -1, lista.VerUltimo(), "Los elementos numericos se borran correctamente al principio")
+	require.EqualValues(t, 3, lista.VerPrimero(), "Los elementos numericos se borran correctamente")
+	require.EqualValues(t, -1, lista.VerUltimo(), "Los elementos numericos se borran correctamente")
 	require.EqualValues(t, 2, lista.Largo(), "Al borrar un elemento, el largo disminuye")
 	lista.BorrarPrimero()
-	require.EqualValues(t, 0, lista.VerUltimo())
+	require.EqualValues(t, -1, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
 	require.EqualValues(t, 1, lista.Largo())
 }
 
 func TestInsertarYBorrarVariosElementosDeTipoString(t *testing.T) {
-	//En este la idea seria probar insertar y borrar sin que la lista llegue a estar vacía
-  	//Probar acá funciones como el Largo, VerPrimero y VerUltimo
+	lista := TDALista.CrearListaEnlazada[string]()
+
+	lista.InsertarPrimero("elem1")
+	require.EqualValues(t, "elem1", lista.VerPrimero(), "En una lista vacia, los elementos de tipo string se insertan correctamente al principio")
+	require.EqualValues(t, "elem1", lista.VerUltimo())
+	require.EqualValues(t, 1, lista.Largo(), "Luego de insertar un elemento, el largo aumenta")
+	lista.InsertarUltimo("elem2")
+	require.EqualValues(t, "elem1", lista.VerPrimero())
+	require.EqualValues(t, "elem2", lista.VerUltimo(), "Los elementos de tipo string se insertan correctamente al final")
+	require.EqualValues(t, 2, lista.Largo())
+	lista.InsertarPrimero("elem3")
+	require.EqualValues(t, "elem3", lista.VerPrimero())
+	require.EqualValues(t, "elem2", lista.VerUltimo())
+	require.EqualValues(t, 3, lista.Largo())
+
+	require.False(t, lista.EstaVacia())
+
+	lista.BorrarPrimero()
+	require.EqualValues(t, "elem1", lista.VerPrimero(), "Los elementos de tipo string se borran correctamente")
+	require.EqualValues(t, "elem2", lista.VerUltimo(), "Los elementos de tipo string se borran correctamente")
+	require.EqualValues(t, 2, lista.Largo(), "Al borrar un elemento, el largo disminuye")
+	lista.BorrarPrimero()
+	require.EqualValues(t, "elem2", lista.VerPrimero())
+	require.EqualValues(t, "elem2", lista.VerUltimo())
+	require.EqualValues(t, 1, lista.Largo())
 }
 
 func TestListaConUnElemento(t *testing.T) {
