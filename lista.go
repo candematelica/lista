@@ -19,11 +19,5 @@ type Lista[T any] interface {
 	Iterador() IteradorLista[T]
 }
 
-type IteradorLista[T any] interface {
-	VerActual() T
-	HaySiguiente() bool
-	Siguiente()
-	Insertar(T)
-	Borrar() T
-}
+
 
