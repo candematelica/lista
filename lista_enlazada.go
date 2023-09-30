@@ -85,3 +85,13 @@ func (lista *listaEnlazada[T])VerUlitmo[T any]() T{
 func (lista *listaEnlazada[T])Largo[T any]() int{
 	return lista.largo
 }
+
+func (lista *listaEnlazada[T])Iterador[T any](visitar func(T) bool){
+	nodoActual := lista.primero
+
+	for nodoActual != nil{
+		valor := nodoActual.dato
+		visitar(valor)
+		nodoActual = nodoActual.siguiente
+	}
+}
