@@ -7,6 +7,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const int granTamanio = 10000
+
 func TestListaVacia(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 	require.True(t, lista.EstaVacia())
@@ -21,7 +23,7 @@ func TestInsertarYBorrarVariosElementosNumericos(t *testing.T) {
 
 	lista.InsertarPrimero(3)
 	require.EqualValues(t, 3, lista.VerPrimero(), "En una lista vacia, los elementos numericos se insertan correctamente al principio")
-	require.EqualValues(t, 3, lista.VerUltimo())
+	require.EqualValues(t, 3, lista.VerUltimo(), "En una lista vacia, los elementos numericos se insertan correctamente al principio")
 	require.EqualValues(t, 1, lista.Largo(), "Luego de insertar un elemento, el largo aumenta")
 	lista.InsertarUltimo(-1)
 	require.EqualValues(t, 3, lista.VerPrimero())
@@ -49,7 +51,7 @@ func TestInsertarYBorrarVariosElementosDeTipoString(t *testing.T) {
 
 	lista.InsertarPrimero("elem1")
 	require.EqualValues(t, "elem1", lista.VerPrimero(), "En una lista vacia, los elementos de tipo string se insertan correctamente al principio")
-	require.EqualValues(t, "elem1", lista.VerUltimo())
+	require.EqualValues(t, "elem1", lista.VerUltimo(), "En una lista vacia, los elementos de tipo string se insertan correctamente al principio")
 	require.EqualValues(t, 1, lista.Largo(), "Luego de insertar un elemento, el largo aumenta")
 	lista.InsertarUltimo("elem2")
 	require.EqualValues(t, "elem1", lista.VerPrimero())
@@ -73,11 +75,24 @@ func TestInsertarYBorrarVariosElementosDeTipoString(t *testing.T) {
 }
 
 func TestListaConUnElemento(t *testing.T) {
-  	//Aca probamos que al borrar una lista con un elemento esta se comporte como vacia	
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	lista.InsertarUltimo(7)
+	require.EqualValues(t, 7, lista.VerPrimero(), "En una lista vacia, los elementos se insertan correctamente al final")
+	require.EqualValues(t, 7, lista.VerUltimo(), "En una lista vacia, los elementos se insertan correctamente al final")
+	require.EqualValues(t, 1, lista.Largo())
+
+	lista.BorrarPrimero()
+	require.True(t, lista.EstaVacia(), "Al borrar un elemento de una lista de largo 1, esta se comporta como vacia")
+	require.EqualValues(t, 0, lista.Largo())
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.BorrarPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
 
 func TestIteradorExterno(t *testing.T) {
-  	//Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio
+
+	//Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio
 	//Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final
 	//Insertar un elemento en el medio se hace en la posicion correcta
 	//Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista
@@ -86,7 +101,7 @@ func TestIteradorExterno(t *testing.T) {
 }
 
 func TestIteradorInterno(t *testing.T) {
-  	//Probar que funcione
+	//Probar que funcione
 	//Se puede usar el iterador, por ejemplo, para calcular una suma de todos los elementos de la lista
 	//La prueba NO debe depender de imprimir dentro de la funcion visitar
 	//Probar el caso de iteracion sin condicion de corte (iterar toda la lista)
@@ -94,6 +109,44 @@ func TestIteradorInterno(t *testing.T) {
 }
 
 func TestVolumen(t *testing.T) {
-	//Usar los iteradores?
-  	//Hacer uno usando BorrarPrimero y InsertarPrimero y otro usando BorrarPrimero y InsertarUltimo
+	//Ver, no se si esta bien este o.o
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	for i := 0; i < granTamanio; i++ {
+		lista.InsertarPrimero(i)
+	}
+	require.False(t, lista.EstaVacia())
+	require.EqualValues(t, 9999, lista.VerPrimero())
+	require.EqualValues(t, 0, lista.VerUltimo())
+	require.EqualValues(t, granTamanio, lista.Largo())
+	for i := granTamanio - 1; i > 0; i-- {
+		require.EqualValues(t, i, lista.VerPrimero())
+		require.EqualValues(t, 0, lista.VerUltimo())
+		require.EqualValues(t, i+1, lista.Largo())
+		lista.BorrarPrimero()
+	}
+	require.True(t, lista.EstaVacia())
+	require.EqualValues(t, 0, lista.Largo())
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.BorrarPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
+
+	for i := 0; i < granTamanio; i++ {
+		lista.InsertarUltimo(i)
+	}
+	require.False(t, lista.EstaVacia())
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, 9999, lista.VerUltimo())
+	require.EqualValues(t, granTamanio, lista.Largo())
+	for i := 0; i < granTamanio; i++ {
+		require.EqualValues(t, i, lista.VerPrimero())
+		require.EqualValues(t, 9999, lista.VerUltimo())
+		require.EqualValues(t, granTamanio-i, lista.Largo())
+		lista.BorrarPrimero()
+	}
+	require.True(t, lista.EstaVacia())
+	require.EqualValues(t, 0, lista.Largo())
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.BorrarPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
+	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
