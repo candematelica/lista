@@ -1,3 +1,5 @@
+package lista
+
 type Lista[T any] interface {
 	//Esta vacia devuelve verdadero si la lista no contiene ningun elemento, falso en caso contario.
 	EstaVacia() bool
