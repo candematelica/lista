@@ -95,3 +95,7 @@ func (lista *listaEnlazada[T])Iterador[T any](visitar func(T) bool){
 		nodoActual = nodoActual.siguiente
 	}
 }
+
+func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
+	
+}
