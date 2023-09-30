@@ -91,21 +91,91 @@ func TestListaConUnElemento(t *testing.T) {
 }
 
 func TestIteradorExterno(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
 
-	//Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio
-	//Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final
-	//Insertar un elemento en el medio se hace en la posicion correcta
-	//Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista
-	//Remover el ultimo elemento con el iterador cambia el ultimo de la lista
-	//Verificar que al remover un elemento del medio, este no esta
+	lista.InsertarPrimero(3)
+	require.EqualValues(t, 3, lista.VerPrimero())
+	require.EqualValues(t, 3, lista.VerUltimo())
+	require.EqualValues(t, 1, lista.Largo())
+	lista.InsertarUltimo(-1)
+	require.EqualValues(t, 3, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
+	require.EqualValues(t, 2, lista.Largo())
+	lista.InsertarPrimero(0)
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
+	require.EqualValues(t, 3, lista.Largo())
+	require.False(t, lista.EstaVacia())
+	lista.InsertarUltimo(9)
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, 9, lista.VerUltimo())
+	require.EqualValues(t, 4, lista.Largo())
+	require.False(t, lista.EstaVacia())
+
+	var primero_eliminado bool
+	var medio_eliminado bool
+	var ultimo_eliminado bool
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		if !primero_eliminado {
+			iter.Borrar()
+			require.EqualValues(t, 3, iter.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
+			primero_eliminado = true
+			iter.Insertar(5)
+			require.EqualValues(t, 5, iter.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
+		} else if iter.VerActual() == 3 && !medio_eliminado {
+			iter.Borrar()
+			require.EqualValues(t, -1, VerActual(), "Verificar que al remover un elemento del medio, este no esta")
+			medio_eliminado = true
+			iter.Insertar(2)
+			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
+		} else if iter.Siguiente() == nil && !ultimo_eliminado {
+			iter.Borrar()
+			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
+			ultimo_eliminado = true
+			iter.Insertar(-7)
+			require.EqualValues(t, -7, iter.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
+		}
+	}
 }
 
 func TestIteradorInterno(t *testing.T) {
-	//Probar que funcione
-	//Se puede usar el iterador, por ejemplo, para calcular una suma de todos los elementos de la lista
-	//La prueba NO debe depender de imprimir dentro de la funcion visitar
-	//Probar el caso de iteracion sin condicion de corte (iterar toda la lista)
-	//Probar iteracion con condicion de corte (que en un momento determinado la funcion visitar de false)
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	lista.InsertarPrimero(3)
+	require.EqualValues(t, 3, lista.VerPrimero())
+	require.EqualValues(t, 3, lista.VerUltimo())
+	require.EqualValues(t, 1, lista.Largo())
+	lista.InsertarUltimo(-1)
+	require.EqualValues(t, 3, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
+	require.EqualValues(t, 2, lista.Largo())
+	lista.InsertarPrimero(0)
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, -1, lista.VerUltimo())
+	require.EqualValues(t, 3, lista.Largo())
+	require.False(t, lista.EstaVacia())
+	lista.InsertarUltimo(9)
+	require.EqualValues(t, 0, lista.VerPrimero())
+	require.EqualValues(t, 9, lista.VerUltimo())
+	require.EqualValues(t, 4, lista.Largo())
+	require.False(t, lista.EstaVacia())
+
+	var suma int
+	lista.Iterar(func(dato T) bool {
+		if dato == -1 {
+			return false
+		}
+		suma = suma + dato
+		return true
+	})
+	require.EqualValues(t, 3, suma, "El iterador interno funciona")
+
+	suma = 0
+	lista.Iterar(func(dato T) bool {
+		suma = suma + dato
+		return true
+	})
+	require.EqualValues(t, 11, suma, "Se puede iterar toda la lista correctamente con el iterador interno")
 }
 
 func TestVolumen(t *testing.T) {
