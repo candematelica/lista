@@ -76,10 +76,12 @@ func (lista *listaEnlazada[T])BorrarPrimero[T any]() T{
 }
 
 func (lista listaEnlazada[T])VerPrimero[T any]() T{
+	chequearListaVacia[T](lista)
 	return lista.primero.dato
 }
 
 func (lista listaEnlazada[T])VerUlitmo[T any]() T{
+	chequearListaVacia[T](lista)
 	return lista.ultimo.dato
 }
 
