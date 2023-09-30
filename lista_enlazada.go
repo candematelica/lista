@@ -13,15 +13,14 @@ type listaEnlazada[T any] struct {
 
 
 func CrearListaEnlazada[T any]() Lista[T]{
-	return &listaEnlazada{ primero:nil, ultimo:nil, largo:0}
+	return &listaEnlazada[T]{}
 }
 
 func crearNodo[T any](dato T) *nodoLista[T]{
-
-	return &nodoLIsta[T]{dato: dato, prox: nil}
+	return &nodoLIsta[T]{dato: dato}
 }
 
-func (lista *listaEnlazada[T])EstaVacia[T any]() bool {
+func (lista listaEnlazada[T])[T any]EstaVacia() bool {
 	return lista.primero == nil 
 }
 
@@ -52,12 +51,10 @@ func (lista *listaEnlazada[T])InsertarUltimo[T any](elem T){
 	lista.largo ++
 }
 
-func chequearListaVacia[T any](lista *listaEnlazada[T]) {
+func chequearListaVacia[T any](lista listaEnlazada[T]) {
 	if lista.EstaVacia() {
-
 		panic("La lista esta vacia")
 	}
-
 }
 
 func (lista *listaEnlazada[T])BorrarPrimero[T any]() T{
@@ -78,19 +75,19 @@ func (lista *listaEnlazada[T])BorrarPrimero[T any]() T{
 
 }
 
-func (lista *listaEnlazada[T])VerPrimero[T any]() T{
+func (lista listaEnlazada[T])VerPrimero[T any]() T{
 	return lista.primero.dato
 }
 
-func (lista *listaEnlazada[T])VerUlitmo[T any]() T{
+func (lista listaEnlazada[T])VerUlitmo[T any]() T{
 	return lista.ultimo.dato
 }
 
-func (lista *listaEnlazada[T])Largo[T any]() int{
+func (lista listaEnlazada[T])Largo[T any]() int{
 	return lista.largo
 }
 
-func (lista *listaEnlazada[T])Iterador[T any](visitar func(T) bool){
+func (lista listaEnlazada[T])Iterador[T any](visitar func(T) bool){
 	nodoActual := lista.primero
 
 	for nodoActual != nil{
@@ -98,8 +95,4 @@ func (lista *listaEnlazada[T])Iterador[T any](visitar func(T) bool){
 		visitar(valor)
 		nodoActual = nodoActual.siguiente
 	}
-}
-
-func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
-	
 }
