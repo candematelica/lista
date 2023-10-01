@@ -102,7 +102,8 @@ func TestIteradorExterno(t *testing.T) {
 	var primero_eliminado bool
 	var medio_eliminado bool
 	var ultimo_eliminado bool
-	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+	iter := lista.Iterador()
+	for iter; iter.HaySiguiente(); iter.Siguiente() {
 		if !primero_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, 3, iter.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
@@ -115,7 +116,7 @@ func TestIteradorExterno(t *testing.T) {
 			medio_eliminado = true
 			iter.Insertar(2)
 			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-		} else if !ultimo_eliminado {
+		} else if !iter.HaySiguiente() && !ultimo_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
 			ultimo_eliminado = true
