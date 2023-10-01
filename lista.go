@@ -1,21 +1,21 @@
 package lista
 
 type Lista[T any] interface {
-	//Esta vacia devuelve verdadero si la lista no contiene ningun elemento, falso en caso contario.
+	//'EstaVacia' devuelve verdadero si la lista no contiene ningun elemento, falso en caso contario.
 	EstaVacia() bool
-	// insertar primero, inserta el elemento pasado por parametro al inicio de la lista
+	//'InsertarPrimero' inserta el elemento pasado por parametro al inicio de la lista
 	InsertarPrimero(T)
-	//insertar ultimo, inserta el elemento pasado por parametro al final de la lista
+	//'InsertarUltimo' inserta el elemento pasado por parametro al final de la lista
 	InsertarUltimo(T)
-	//borrar primero, borra el primer elemento de la lista, devuelve un panic si esta vacia
+	//'BorrarPrimero' borra el primer elemento de la lista, devuelve un panic si esta vacia
 	BorrarPrimero() T
-	//ver primero, muestra el primer elemento de la lista, devuelve un panic si esta vacia
+	//'VerPrimero' muestra el primer elemento de la lista, devuelve un panic si esta vacia
 	VerPrimero() T
-	//ver ultimo, muestra el primer elemento de la lista, devuelve un panic si esta vacia
+	//'VerUltimo' muestra el primer elemento de la lista, devuelve un panic si esta vacia
 	VerUltimo() T
-	//ver largo devuelve la cantidad de elementos que tiene la lista
+	//'Largo' devuelve la cantidad de elementos que tiene la lista
 	Largo() int
-	//iterador interno, itera la lista hasta que la funcion devuelva false o hasta que termine de recorrer la lista
+	//iterador interno
 	Iterar(visitar func(T) bool)
 	//iterador externo
 	Iterador() IteradorLista[T]
