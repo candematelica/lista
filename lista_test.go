@@ -136,6 +136,10 @@ func TestIteradorExterno(t *testing.T) {
 			require.EqualValues(t, -7, iter.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
 		}
 	}
+
+	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.VerActual() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.Siguiente() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.Borrar() })
 }
 
 func TestIteradorInterno(t *testing.T) {
