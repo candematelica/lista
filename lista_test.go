@@ -116,11 +116,11 @@ func TestIteradorExterno(t *testing.T) {
 		} else if iter.VerActual() == 3 && !medio_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Verificar que al remover un elemento del medio, este no esta")
-			equire.EqualValues(t, 3, iter.Largo())
+			require.EqualValues(t, 3, iter.Largo())
 			medio_eliminado = true
 			iter.Insertar(2)
 			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-			equire.EqualValues(t, 4, iter.Largo())
+			require.EqualValues(t, 4, iter.Largo())
 		} else if iter.actual.siguiente == nil && !ultimo_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
