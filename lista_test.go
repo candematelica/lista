@@ -158,7 +158,6 @@ func TestIteradorInterno(t *testing.T) {
 }
 
 func TestVolumenPrimero(t *testing.T) {
-	//Ver, no se si esta bien este o.o
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	for i := 0; i < GRANTAMANIO; i++ {
