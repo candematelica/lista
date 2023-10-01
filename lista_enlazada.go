@@ -123,7 +123,7 @@ func (iter iteradorLista[T]) HaySiguiente() bool {
 	return iter.actual.siguiente != nil
 }
 
-func (iter iteradorLista[T]) Siguiente() T {
+func (iter *iteradorLista[T]) Siguiente() T {
 	iter.chequearIterador()
 	
 	iter.actual = iter.actual.siguiente
