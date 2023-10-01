@@ -15,7 +15,7 @@ type Lista[T any] interface {
 	VerUltimo() T
 	//ver largo devuelve la cantidad de elementos que tiene la lista
 	Largo() int
-	//iterador interno
+	//iterador interno, itera la lista hasta que la funcion devuelva false o hasta que termine de recorrer la lista
 	Iterar(visitar func(T) bool)
 	//iterador externo
 	Iterador() IteradorLista[T]
