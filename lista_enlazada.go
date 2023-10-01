@@ -104,7 +104,7 @@ func (lista listaEnlazada[T])Iterar[T any](visitar func(T) bool){
 }
 
 func (lista *listaEnlazada[T]) Iterador() IteradorLista[T] {
-	return &iteradorListar[T]{lista, lista.VerPrimero()}
+	return &iteradorLista[T]{lista, lista.VerPrimero()}
 }
 
 func (iter iteradorLista[T]) chequearIterador() {
