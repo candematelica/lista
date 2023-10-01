@@ -130,6 +130,8 @@ func (iter *iteradorLista[T]) Insertar(elem T) {
 		iter.actual.siguiente = iter.actual
 		iter.actual.dato = elem
 	}
+
+	iter.lista.largo++
 }
 
 func (iter *iteradorLista[T]) Borrar() T {
@@ -142,6 +144,8 @@ func (iter *iteradorLista[T]) Borrar() T {
 		iter.actual.dato = iter.actual.siguiente.dato
 		iter.actual.siguiente = iter.actual.siguiente.siguiente
 	}
+
+	iter.lista.largo--
 
 	return dato
 }
