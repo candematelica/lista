@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const int GRANTAMANIO = 10000
+const GRANTAMANIO = 10000
 
 func TestListaVacia(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
@@ -111,11 +111,11 @@ func TestIteradorExterno(t *testing.T) {
 			require.EqualValues(t, 5, iter.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
 		} else if iter.VerActual() == 3 && !medio_eliminado {
 			iter.Borrar()
-			require.EqualValues(t, -1, VerActual(), "Verificar que al remover un elemento del medio, este no esta")
+			require.EqualValues(t, -1, iter.VerActual(), "Verificar que al remover un elemento del medio, este no esta")
 			medio_eliminado = true
 			iter.Insertar(2)
 			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-		} else if iter.Siguiente() == nil && !ultimo_eliminado {
+		} else if !ultimo_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
 			ultimo_eliminado = true
@@ -124,9 +124,9 @@ func TestIteradorExterno(t *testing.T) {
 		}
 	}
 
-	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.VerActual() })
-	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.Siguiente() })
-	require.PanicsWithValue(t, "El iterador ya itero", func() { lista.Borrar() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.VerActual() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.Siguiente() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.Borrar() })
 }
 
 func TestIteradorInterno(t *testing.T) {
@@ -139,7 +139,7 @@ func TestIteradorInterno(t *testing.T) {
 	require.False(t, lista.EstaVacia())
 
 	var suma int
-	lista.Iterar(func(dato T) bool {
+	lista.Iterar(func(dato int) bool {
 		if dato == -1 {
 			return false
 		}
@@ -149,7 +149,7 @@ func TestIteradorInterno(t *testing.T) {
 	require.EqualValues(t, 3, suma, "El iterador interno funciona")
 
 	suma = 0
-	lista.Iterar(func(dato T) bool {
+	lista.Iterar(func(dato int) bool {
 		suma = suma + dato
 		return true
 	})

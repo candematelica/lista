@@ -30,7 +30,7 @@ type IteradorLista[T any] interface {
 	HaySiguiente() bool
 	//'Siguiente' devuelve el siguiente elemento a la posicion en la que estamos parados en la lista, en caso
 	//de que se llame a esta funcion cuando el iterador ya haya terminado de iterar, devolvera un panic
-	Siguiente() T
+	Siguiente()
 	//'Insertar' inserta un elemento pasado por parametro en la posicion en la que estamos parados en la lista
 	Insertar(T)
 	//'Borrar' borra y devuelve el elemento sobre el cual estemos parados en la lista, en caso de que
