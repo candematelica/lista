@@ -17,7 +17,6 @@ type iteradorLista[T any] struct {
 }
 
 func CrearListaEnlazada[T any]() Lista[T] {
-
 	return &listaEnlazada[T]{primero: nil, ultimo: nil, largo: 0}
 }
 
@@ -60,13 +59,10 @@ func chequearListaVacia[T any](lista *listaEnlazada[T]) {
 }
 
 func (lista *listaEnlazada[T]) BorrarPrimero() T {
-
 	chequearListaVacia(lista)
-
+	
 	dato := lista.primero.dato
-
 	lista.primero = lista.primero.siguiente
-
 	lista.largo--
 
 	if lista.largo == 0 {
@@ -74,7 +70,6 @@ func (lista *listaEnlazada[T]) BorrarPrimero() T {
 	}
 
 	return dato
-
 }
 
 func (lista *listaEnlazada[T]) VerPrimero() T {
@@ -102,7 +97,6 @@ func (lista *listaEnlazada[T]) Iterar(visitar func(T) bool) {
 }
 
 func (lista *listaEnlazada[T]) Iterador() IteradorLista[T] {
-
 	return &iteradorLista[T]{lista: lista, actual: lista.primero}
 }
 
@@ -114,7 +108,6 @@ func (iter *iteradorLista[T]) chequearIterador() {
 
 func (iter *iteradorLista[T]) VerActual() T {
 	iter.chequearIterador()
-
 	return iter.actual.dato
 }
 
@@ -124,9 +117,7 @@ func (iter *iteradorLista[T]) HaySiguiente() bool {
 
 func (iter *iteradorLista[T]) Siguiente() {
 	iter.chequearIterador()
-
 	iter.actual = iter.actual.siguiente
-
 }
 
 func (iter *iteradorLista[T]) Insertar(elem T) {
@@ -138,7 +129,6 @@ func (iter *iteradorLista[T]) Insertar(elem T) {
 	} else {
 		iter.actual.siguiente = iter.actual
 		iter.actual.dato = elem
-
 	}
 }
 
