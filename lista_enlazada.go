@@ -11,9 +11,13 @@ type listaEnlazada[T any] struct {
 	largo   int
 }
 
+type iteradorLista[T any] struct {
+	lista *listaEnlazada[T]
+	actual *nodoLista[T]
+}
 
 func CrearListaEnlazada[T any]() Lista[T]{
-	return &listaEnlazada[T]{}
+	return &listaEnlazada{}
 }
 
 func crearNodo[T any](dato T) *nodoLista[T]{
@@ -97,4 +101,59 @@ func (lista listaEnlazada[T])Iterar[T any](visitar func(T) bool){
 		visitar(valor)
 		nodoActual = nodoActual.siguiente
 	}
+}
+
+func (lista *listaEnlazada[T]) Iterador() IteradorLista[T] {
+	return &iteradorListar[T]{lista, lista.VerPrimero()}
+}
+
+func (iter iteradorLista[T]) chequearIterador() {
+	if !iter.HaySiguiente() {
+		panic("El iterador ya itero")
+	}
+}
+
+func (iter iteradorLista[T]) VerActual() T {
+	iter.chequearIterador()
+
+	return iter.actual.dato
+}
+
+func (iter iteradorLista[T]) HaySiguiente() bool {
+	return iter.actual.siguiente != nil
+}
+
+func (iter iteradorLista[T]) Siguiente() T {
+	iter.chequearIterador()
+	
+	iter.actual = iter.actual.siguiente
+	return iter.actual.dato
+}
+
+func (iter *iteradorLista[T]) Insertar(elem T) {
+	if !iter.HaySiguiente() {
+		puntero_ante_ultimo := iter.actual
+		iter.actual.dato = elem
+		iter.actual.siguiente = nil
+		puntero_ante_ultimo.siguiente = iter.actual
+	} else {
+		puntero_siguiente := iter.actual
+		iter.actual.dato = elem
+		iter.actual.siguiente = puntero_siguiente
+	}
+}
+
+func (iter *iteradorLista[T]) Borrar() T {
+	iter.chequearIterador()
+
+	dato := iter.actual.dato
+	if !iter.HaySiguiente() {
+		iter.actual.dato = nil
+		iter.actual = iter.lista.ultimo
+	} else {
+		iter.actual.dato = iter.actual.siguiente.dato
+		iter.actual.siguiente = iter.actual.siguiente.siguiente
+	}
+
+	return dato
 }
