@@ -167,7 +167,7 @@ func TestIteradorInternoListaCompleta(t *testing.T) {
 	require.False(t, lista.EstaVacia())
 
 	var suma int
-	lista.Iterar(visitar func(dato int) bool {
+	lista.Iterar(func(dato int) bool {
 		suma = suma + dato
 		return true
 	})
