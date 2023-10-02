@@ -152,11 +152,11 @@ func (iter *iteradorLista[T]) Borrar() T {
 		return dato
 	}
 
-	if iter.lista.largo == 1 { //Estoy borrando el elemento de una lista de 1 elemento
+	if iter.lista.largo == 1 {
 		iter.lista.ultimo = nil
 		iter.lista.primero = nil
 		iter.actual = nil
-	} else if iter.actual.siguiente == nil { //Estoy borrando un elemento al final
+	} else if iter.actual.siguiente == nil {
 		punteroAnteUltimo := iter.lista.primero
 		for punteroAnteUltimo.siguiente != iter.lista.ultimo {
 			punteroAnteUltimo = punteroAnteUltimo.siguiente
@@ -165,10 +165,10 @@ func (iter *iteradorLista[T]) Borrar() T {
 		iter.lista.ultimo.siguiente = nil
 		iter.actual = punteroAnteUltimo
 		iter.actual.siguiente = nil
-	} else if iter.lista.primero == iter.actual { //Estoy borrando al principio
+	} else if iter.lista.primero == iter.actual {
 		iter.lista.primero = iter.lista.primero.siguiente
 		iter.actual = iter.actual.siguiente
-	} else { //Estoy borrando en el medio
+	} else {
 		punteroAnterior := iter.lista.primero
 		for iter.actual != punteroAnterior.siguiente {
 			punteroAnterior = punteroAnterior.siguiente
