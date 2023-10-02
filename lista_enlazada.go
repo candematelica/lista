@@ -105,7 +105,7 @@ func (lista *listaEnlazada[T]) Iterador() IteradorLista[T] {
 
 func (iter *iteradorLista[T]) chequearIterador() {
 	if !iter.HaySiguiente() {
-		panic("El iterador ya itero")
+		panic("El iterador termino de iterar")
 	}
 }
 
