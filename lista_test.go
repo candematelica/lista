@@ -137,7 +137,7 @@ func TestIteradorExterno(t *testing.T) {
 	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.Borrar() })
 }
 
-func TestIteradorInterno(t *testing.T) {
+func TestIteradorInternoConCondicionDeCorte(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	lista.InsertarPrimero(3)
@@ -147,7 +147,7 @@ func TestIteradorInterno(t *testing.T) {
 	require.False(t, lista.EstaVacia())
 
 	var suma int
-	lista.Iterar(func(dato int) bool {
+	lista.Iterar(visitar func(dato int) bool {
 		if dato == -1 {
 			return false
 		}
@@ -155,9 +155,19 @@ func TestIteradorInterno(t *testing.T) {
 		return true
 	})
 	require.EqualValues(t, 3, suma, "El iterador interno funciona")
+}
 
-	suma = 0
-	lista.Iterar(func(dato int) bool {
+func TestIteradorInternoListaCompleta(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	lista.InsertarPrimero(3)
+	lista.InsertarUltimo(-1)
+	lista.InsertarPrimero(0)
+	lista.InsertarUltimo(9)
+	require.False(t, lista.EstaVacia())
+
+	var suma int
+	lista.Iterar(visitar func(dato int) bool {
 		suma = suma + dato
 		return true
 	})
