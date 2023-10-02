@@ -87,13 +87,15 @@ func (lista *listaEnlazada[T]) Largo() int {
 	return lista.largo
 }
 
-func (lista *listaEnlazada[T]) Iterar(visitar func(T) bool) {
+func (lista listaEnlazada[T]) Iterar(visitar func(T) bool) {
 	nodoActual := lista.primero
+	corte := true
 
-	for nodoActual != nil {
+	for nodoActual != nil && corte {
 		valor := nodoActual.dato
-		visitar(valor)
+		corte = visitar(valor)
 		nodoActual = nodoActual.siguiente
+
 	}
 }
 
