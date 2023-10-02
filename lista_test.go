@@ -103,38 +103,38 @@ func TestIteradorExterno(t *testing.T) {
 	var primero_eliminado bool
 	var medio_eliminado bool
 	var ultimo_eliminado bool
-
-	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+	iter := lista.Iterador()
+	for iter; iter.HaySiguiente(); iter.Siguiente() {
 		if !primero_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, 3, iter.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
-
+			require.EqualValues(t, 3, iter.lista.Largo())
 			primero_eliminado = true
 			iter.Insertar(5)
 			require.EqualValues(t, 5, iter.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
-			continue
-
+			require.EqualValues(t, 4, iter.lista.Largo())
 		} else if iter.VerActual() == 3 && !medio_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Verificar que al remover un elemento del medio, este no esta")
-
+			require.EqualValues(t, 3, iter.lista.Largo())
 			medio_eliminado = true
 			iter.Insertar(2)
 			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-
+			require.EqualValues(t, 4, iter.lista.Largo())
 		} else if iter.VerActual() == 9 && !ultimo_eliminado {
 			iter.Borrar()
 			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
-
+			require.EqualValues(t, 3, iter.lista.Largo())
 			ultimo_eliminado = true
 			iter.Insertar(-7)
-
 			require.EqualValues(t, -7, iter.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
-
+			require.EqualValues(t, 4, iter.lista.Largo())
 		}
-
 	}
 
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.VerActual() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.Siguiente() })
+	require.PanicsWithValue(t, "El iterador ya itero", func() { iter.Borrar() })
 }
 
 func TestIteradorInterno(t *testing.T) {
