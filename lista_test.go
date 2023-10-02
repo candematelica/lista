@@ -179,12 +179,12 @@ func TestVolumenPrimero(t *testing.T) {
 
 	for i := 0; i < GRANTAMANIO; i++ {
 		lista.InsertarPrimero(i)
+		require.EqualValues(t, i, lista.VerPrimero())
+		require.EqualValues(t, 0, lista.VerUltimo())
+		require.EqualValues(t, i+1, lista.Largo())
 	}
 	require.False(t, lista.EstaVacia())
-	require.EqualValues(t, 9999, lista.VerPrimero())
-	require.EqualValues(t, 0, lista.VerUltimo())
-	require.EqualValues(t, GRANTAMANIO, lista.Largo())
-	for i := GRANTAMANIO - 1; i > 0; i-- {
+	for i := GRANTAMANIO - 1; i >= 0; i-- {
 		require.EqualValues(t, i, lista.VerPrimero())
 		require.EqualValues(t, 0, lista.VerUltimo())
 		require.EqualValues(t, i+1, lista.Largo())
@@ -196,16 +196,17 @@ func TestVolumenPrimero(t *testing.T) {
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
+
 func TestVolumenUltimo(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	for i := 0; i < GRANTAMANIO; i++ {
 		lista.InsertarUltimo(i)
+		require.EqualValues(t, 0, lista.VerPrimero())
+		require.EqualValues(t, i, lista.VerUltimo())
+		require.EqualValues(t, i+1, lista.Largo())
 	}
 	require.False(t, lista.EstaVacia())
-	require.EqualValues(t, 0, lista.VerPrimero())
-	require.EqualValues(t, 9999, lista.VerUltimo())
-	require.EqualValues(t, GRANTAMANIO, lista.Largo())
 	for i := 0; i < GRANTAMANIO; i++ {
 		require.EqualValues(t, i, lista.VerPrimero())
 		require.EqualValues(t, 9999, lista.VerUltimo())
@@ -218,3 +219,4 @@ func TestVolumenUltimo(t *testing.T) {
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
+
