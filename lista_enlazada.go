@@ -45,9 +45,10 @@ func (lista *listaEnlazada[T]) InsertarUltimo(elem T) {
 
 	if lista.EstaVacia() {
 		lista.primero = nodoNuevo
+	} else {
+		lista.ultimo.siguiente = nodoNuevo
 	}
 
-	lista.ultimo.siguiente = lista.ultimo
 	lista.ultimo = nodoNuevo
 	lista.largo++
 }
@@ -60,7 +61,7 @@ func chequearListaVacia[T any](lista *listaEnlazada[T]) {
 
 func (lista *listaEnlazada[T]) BorrarPrimero() T {
 	chequearListaVacia(lista)
-	
+
 	dato := lista.primero.dato
 	lista.primero = lista.primero.siguiente
 	lista.largo--
@@ -119,30 +120,61 @@ func (iter *iteradorLista[T]) Siguiente() {
 	iter.chequearIterador()
 	iter.actual = iter.actual.siguiente
 }
-
 func (iter *iteradorLista[T]) Insertar(elem T) {
-	if !iter.HaySiguiente() {
-		puntero_ante_ultimo := iter.actual
-		iter.actual.dato = elem
-		iter.actual.siguiente = nil
-		puntero_ante_ultimo.siguiente = iter.actual
+	nuevoNodo := &nodoLista[T]{dato: elem}
+
+	if iter.actual.siguiente == nil {
+		iter.lista.ultimo.siguiente = nuevoNodo
+		iter.lista.ultimo = nuevoNodo
+		iter.actual = nuevoNodo
+	} else if iter.lista.primero == iter.actual {
+		nuevoNodo.siguiente = iter.actual
+		iter.lista.primero = nuevoNodo
+		iter.actual = nuevoNodo
 	} else {
-		iter.actual.siguiente = iter.actual
-		iter.actual.dato = elem
+		nuevoNodo.siguiente = iter.actual
+		punteroAnterior := iter.lista.primero
+		for punteroAnterior.siguiente != iter.actual {
+			punteroAnterior = punteroAnterior.siguiente
+		}
+		punteroAnterior.siguiente = nuevoNodo
+		iter.actual = nuevoNodo
 	}
 
 	iter.lista.largo++
 }
-
 func (iter *iteradorLista[T]) Borrar() T {
 	iter.chequearIterador()
 
 	dato := iter.actual.dato
-	if !iter.HaySiguiente() {
-		iter.actual = iter.lista.ultimo
-	} else {
-		iter.actual.dato = iter.actual.siguiente.dato
-		iter.actual.siguiente = iter.actual.siguiente.siguiente
+
+	if iter.actual == nil {
+		return dato
+	}
+
+	if iter.lista.largo == 1 { //Estoy borrando el elemento de una lista de 1 elemento
+		iter.lista.ultimo = nil
+		iter.lista.primero = nil
+		iter.actual = nil
+	} else if iter.actual.siguiente == nil { //Estoy borrando un elemento al final
+		punteroAnteUltimo := iter.lista.primero
+		for punteroAnteUltimo.siguiente != iter.lista.ultimo {
+			punteroAnteUltimo = punteroAnteUltimo.siguiente
+		}
+		iter.lista.ultimo = punteroAnteUltimo
+		iter.lista.ultimo.siguiente = nil
+		iter.actual = punteroAnteUltimo
+		iter.actual.siguiente = nil
+	} else if iter.lista.primero == iter.actual { //Estoy borrando al principio
+		iter.lista.primero = iter.lista.primero.siguiente
+		iter.actual = iter.actual.siguiente
+	} else { //Estoy borrando en el medio
+		punteroAnterior := iter.lista.primero
+		for iter.actual != punteroAnterior.siguiente {
+			punteroAnterior = punteroAnterior.siguiente
+		}
+		punteroAnterior.siguiente = iter.actual.siguiente
+		iter.actual = iter.actual.siguiente
 	}
 
 	iter.lista.largo--
