@@ -167,7 +167,11 @@ func TestIteradorInternoListaCompleta(t *testing.T) {
 
 	var suma int
 	lista.Iterar(func(dato int) bool {
+<<<<<<< HEAD
 		suma = suma + int(dato)
+=======
+		suma = suma + dato
+>>>>>>> refs/remotes/origin/main
 		return true
 	})
 	require.EqualValues(t, 11, suma, "Se puede iterar toda la lista correctamente con el iterador interno")
