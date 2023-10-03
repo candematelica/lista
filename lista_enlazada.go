@@ -125,12 +125,16 @@ func (iter *iteradorLista[T]) Siguiente() {
 func (iter *iteradorLista[T]) Insertar(elem T) {
 	nuevoNodo := &nodoLista[T]{dato: elem}
 
-	if iter.actual.siguiente == nil {
+	if iter.lista.largo == 0 {
+		iter.lista.primero = nuevoNodo
+		iter.lista.ultimo = nuevoNodo
+		iter.actual = nuevoNodo
+	} else if iter.actual == iter.lista.ultimo {
 		iter.lista.ultimo.siguiente = nuevoNodo
 		iter.lista.ultimo = nuevoNodo
 		iter.actual = nuevoNodo
-	} else if iter.lista.primero == iter.actual {
-		nuevoNodo.siguiente = iter.actual
+	} else if iter.lista.largo > 1 && iter.lista.primero == iter.actual {
+		nuevoNodo.siguiente = iter.lista.primero
 		iter.lista.primero = nuevoNodo
 		iter.actual = nuevoNodo
 	} else {
@@ -158,18 +162,17 @@ func (iter *iteradorLista[T]) Borrar() T {
 		iter.lista.ultimo = nil
 		iter.lista.primero = nil
 		iter.actual = nil
-	} else if iter.actual.siguiente == nil {
+	} else if iter.actual == iter.lista.ultimo {
 		punteroAnteUltimo := iter.lista.primero
 		for punteroAnteUltimo.siguiente != iter.lista.ultimo {
 			punteroAnteUltimo = punteroAnteUltimo.siguiente
 		}
+		punteroAnteUltimo.siguiente = nil
 		iter.lista.ultimo = punteroAnteUltimo
-		iter.lista.ultimo.siguiente = nil
 		iter.actual = punteroAnteUltimo
-		iter.actual.siguiente = nil
 	} else if iter.lista.primero == iter.actual {
 		iter.lista.primero = iter.lista.primero.siguiente
-		iter.actual = iter.actual.siguiente
+		iter.actual = iter.lista.primero
 	} else {
 		punteroAnterior := iter.lista.primero
 		for iter.actual != punteroAnterior.siguiente {
