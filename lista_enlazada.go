@@ -122,60 +122,58 @@ func (iter *iteradorLista[T]) Siguiente() {
 	iter.chequearIterador()
 	iter.actual = iter.actual.siguiente
 }
-func (iter *iteradorLista[T]) Insertar(elem T) {
-	nuevoNodo := &nodoLista[T]{dato: elem}
 
-	if iter.lista.largo == 0 {
+func (iter *iteradorLista[T]) Insertar(elem T) {
+	nuevoNodo := crearNodo[T](elem)
+
+	if iter.lista.EstaVacia() {
 		iter.lista.primero = nuevoNodo
 		iter.lista.ultimo = nuevoNodo
 		iter.actual = nuevoNodo
-	} else if iter.actual == iter.lista.ultimo {
-		iter.lista.ultimo.siguiente = nuevoNodo
-		iter.lista.ultimo = nuevoNodo
-		iter.actual = nuevoNodo
-	} else if iter.lista.largo > 1 && iter.lista.primero == iter.actual {
+	} else if iter.actual == iter.lista.primero {
 		nuevoNodo.siguiente = iter.lista.primero
 		iter.lista.primero = nuevoNodo
 		iter.actual = nuevoNodo
 	} else {
-		nuevoNodo.siguiente = iter.actual
 		punteroAnterior := iter.lista.primero
 		for punteroAnterior.siguiente != iter.actual {
 			punteroAnterior = punteroAnterior.siguiente
 		}
+		nuevoNodo.siguiente = iter.actual
 		punteroAnterior.siguiente = nuevoNodo
+		if iter.actual == nil {
+			iter.lista.ultimo = nuevoNodo
+		}
 		iter.actual = nuevoNodo
 	}
 
 	iter.lista.largo++
 }
+
 func (iter *iteradorLista[T]) Borrar() T {
-	iter.chequearIterador()
 
-	dato := iter.actual.dato
+	dato := iter.VerActual()
 
-	if iter.actual == nil {
-		return dato
-	}
-
-	if iter.lista.largo == 1 {
-		iter.lista.ultimo = nil
-		iter.lista.primero = nil
-		iter.actual = nil
+	if iter.actual == iter.lista.primero {
+		if iter.lista.largo == 1 {
+			iter.lista.primero = nil
+			iter.lista.ultimo = nil
+			iter.actual = nil
+		} else {
+			iter.lista.primero = iter.actual.siguiente
+			iter.actual = iter.lista.primero
+		}
 	} else if iter.actual == iter.lista.ultimo {
 		punteroAnteUltimo := iter.lista.primero
 		for punteroAnteUltimo.siguiente != iter.lista.ultimo {
 			punteroAnteUltimo = punteroAnteUltimo.siguiente
 		}
-		punteroAnteUltimo.siguiente = nil
 		iter.lista.ultimo = punteroAnteUltimo
-		iter.actual = punteroAnteUltimo
-	} else if iter.lista.primero == iter.actual {
-		iter.lista.primero = iter.lista.primero.siguiente
-		iter.actual = iter.lista.primero
+		iter.actual = nil
+		iter.lista.ultimo.siguiente = nil
 	} else {
 		punteroAnterior := iter.lista.primero
-		for iter.actual != punteroAnterior.siguiente {
+		for punteroAnterior.siguiente != iter.actual {
 			punteroAnterior = punteroAnterior.siguiente
 		}
 		punteroAnterior.siguiente = iter.actual.siguiente
