@@ -100,38 +100,62 @@ func TestIteradorExterno(t *testing.T) {
 	require.EqualValues(t, 4, lista.Largo())
 	require.False(t, lista.EstaVacia())
 
-	var primero_eliminado bool
-	var medio_eliminado bool
-	var ultimo_eliminado bool
+	var primero_insertado bool
+	var medio_insertado bool
 
-	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
-		if !primero_eliminado {
-			iter.Borrar()
-			require.EqualValues(t, 3, iter.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
-
-			primero_eliminado = true
-			iter.Insertar(5)
-			require.EqualValues(t, 5, iter.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
-
-		} else if iter.VerActual() == 3 && !medio_eliminado {
-			iter.Borrar()
-			require.EqualValues(t, -1, iter.VerActual(), "Verificar que al remover un elemento del medio, este no esta")
-
-			medio_eliminado = true
-			iter.Insertar(2)
-			require.EqualValues(t, 2, iter.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-
-		} else if iter.VerActual() == 9 && !ultimo_eliminado {
-			iter.Borrar()
-			require.EqualValues(t, -1, iter.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
-
-			ultimo_eliminado = true
-			iter.Insertar(-7)
-
-			require.EqualValues(t, -7, iter.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
-
+	for iter1 := lista.Iterador(); iter1.HaySiguiente(); iter1.Siguiente() {
+		if !primero_insertado {
+			iter1.Insertar(5)
+			primero_insertado = true
+		} else if iter1.VerActual() == 3 && !medio_insertado {
+			iter1.Insertar(2)
+			medio_insertado = true
+		} else if iter1.VerActual() == 9 {
+			iter1.Siguiente()
+			iter1.Insertar(-7)
+			break
 		}
+	}
 
+	var i int
+	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
+		switch i {
+		case 0:
+			require.EqualValues(t, 5, iter2.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
+		case 2:
+			require.EqualValues(t, 2, iter2.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
+		case 6:
+			require.EqualValues(t, -7, iter2.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
+		}
+		i++
+	}
+
+	var primero_eliminado bool
+	for iter3 := lista.Iterador(); iter3.HaySiguiente(); iter3.Siguiente() {
+		if !primero_eliminado {
+			iter3.Borrar()
+			primero_eliminado = true
+		} else if iter3.VerActual() == 3 {
+			iter3.Borrar()
+		} else if iter3.VerActual() == -7 {
+			iter3.Borrar()
+			break
+		}
+	}
+
+	var j int
+	for iter4 := lista.Iterador(); iter4.HaySiguiente(); iter4.Siguiente() {
+		switch j {
+		case 0:
+			require.EqualValues(t, 0, iter4.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
+		case 1:
+			require.EqualValues(t, 2, iter4.VerActual(), "Al remover un elemento del medio, este no esta")
+		case 2:
+			require.EqualValues(t, -1, iter4.VerActual(), "Al remover un elemento del medio, este no esta")
+		case 3:
+			require.EqualValues(t, 9, iter4.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
+		}
+		j++
 	}
 
 }
@@ -167,7 +191,6 @@ func TestIteradorInternoListaCompleta(t *testing.T) {
 
 	var suma int
 	lista.Iterar(func(dato int) bool {
-
 		suma = suma + dato
 		return true
 	})
