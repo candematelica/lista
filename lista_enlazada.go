@@ -126,26 +126,23 @@ func (iter *iteradorLista[T]) Siguiente() {
 func (iter *iteradorLista[T]) Insertar(elem T) {
 	nuevoNodo := crearNodo[T](elem)
 
-	if iter.lista.EstaVacia() {
+	nuevoNodo.siguiente = iter.actual
+	if iter.actual == iter.lista.primero {
 		iter.lista.primero = nuevoNodo
-		iter.lista.ultimo = nuevoNodo
-		iter.actual = nuevoNodo
-	} else if iter.actual == iter.lista.primero {
-		nuevoNodo.siguiente = iter.lista.primero
-		iter.lista.primero = nuevoNodo
-		iter.actual = nuevoNodo
+		if iter.lista.ultimo == nil {
+			iter.lista.ultimo = nuevoNodo
+		}
 	} else {
 		punteroAnterior := iter.lista.primero
 		for punteroAnterior.siguiente != iter.actual {
 			punteroAnterior = punteroAnterior.siguiente
 		}
-		nuevoNodo.siguiente = iter.actual
 		punteroAnterior.siguiente = nuevoNodo
 		if iter.actual == nil {
 			iter.lista.ultimo = nuevoNodo
 		}
-		iter.actual = nuevoNodo
 	}
+	iter.actual = nuevoNodo
 
 	iter.lista.largo++
 }
@@ -155,30 +152,21 @@ func (iter *iteradorLista[T]) Borrar() T {
 	dato := iter.VerActual()
 
 	if iter.actual == iter.lista.primero {
-		if iter.lista.largo == 1 {
-			iter.lista.primero = nil
+		iter.lista.primero = iter.lista.primero.siguiente
+		if iter.lista.primero == nil {
 			iter.lista.ultimo = nil
-			iter.actual = nil
-		} else {
-			iter.lista.primero = iter.actual.siguiente
-			iter.actual = iter.lista.primero
 		}
-	} else if iter.actual == iter.lista.ultimo {
-		punteroAnteUltimo := iter.lista.primero
-		for punteroAnteUltimo.siguiente != iter.lista.ultimo {
-			punteroAnteUltimo = punteroAnteUltimo.siguiente
-		}
-		iter.lista.ultimo = punteroAnteUltimo
-		iter.actual = nil
-		iter.lista.ultimo.siguiente = nil
 	} else {
 		punteroAnterior := iter.lista.primero
 		for punteroAnterior.siguiente != iter.actual {
 			punteroAnterior = punteroAnterior.siguiente
 		}
 		punteroAnterior.siguiente = iter.actual.siguiente
-		iter.actual = iter.actual.siguiente
+		if iter.actual == iter.lista.ultimo {
+			iter.lista.ultimo = punteroAnterior
+		}
 	}
+	iter.actual = iter.actual.siguiente
 
 	iter.lista.largo--
 
