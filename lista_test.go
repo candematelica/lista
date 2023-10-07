@@ -90,7 +90,7 @@ func TestListaConUnElemento(t *testing.T) {
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
 
-func TestIteradorExterno(t *testing.T) {
+func TestIteradorExternoBorrar(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	lista.InsertarPrimero(3)
@@ -100,66 +100,160 @@ func TestIteradorExterno(t *testing.T) {
 	require.EqualValues(t, 4, lista.Largo())
 	require.False(t, lista.EstaVacia())
 
-	var primero_insertado bool
-	var medio_insertado bool
-
-	for iter1 := lista.Iterador(); iter1.HaySiguiente(); iter1.Siguiente() {
-		if !primero_insertado {
-			iter1.Insertar(5)
-			primero_insertado = true
-		} else if iter1.VerActual() == 3 && !medio_insertado {
-			iter1.Insertar(2)
-			medio_insertado = true
-		} else if iter1.VerActual() == 9 {
-			iter1.Siguiente()
-			iter1.Insertar(-7)
-			break
-		}
+<<<<<<< HEAD
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		iter.Borrar()
 	}
+	require.True(t, lista.EstaVacia())
+}
 
-	var i int
-	for iter2 := lista.Iterador(); iter2.HaySiguiente(); iter2.Siguiente() {
+func TestIteradorExternoInsertarEnListaVacia(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	i := 0
+	iter := lista.Iterador()
+	iter.Insertar(5)
+	iter.Insertar(4)
+	iter.Insertar(3)
+	iter.Insertar(2)
+	iter.Insertar(1)
+	iter.Insertar(0)
+
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
 		switch i {
 		case 0:
-			require.EqualValues(t, 5, iter2.VerActual(), "Al insertar un elemento en la posicion en la que se crea el iterador, efectivamente se inserta al principio")
+			require.EqualValues(t, 0, iter.VerActual(), "caso 0")
+		case 1:
+			require.EqualValues(t, 1, iter.VerActual(), "caso 1")
 		case 2:
-			require.EqualValues(t, 2, iter2.VerActual(), "Insertar un elemento en el medio se hace en la posicion correcta")
-		case 6:
-			require.EqualValues(t, -7, iter2.VerActual(), "Insertar un elemento cuando el iterador esta al final efectivamente es equivalente a insertar al final")
+			require.EqualValues(t, 2, iter.VerActual(), "caso 2")
+		case 3:
+			require.EqualValues(t, 3, iter.VerActual(), "caso 3")
+		case 4:
+			require.EqualValues(t, 4, iter.VerActual(), "caso 4")
+		case 5:
+			require.EqualValues(t, 5, iter.VerActual(), "caso 5")
 		}
 		i++
 	}
+}
 
-	var primero_eliminado bool
-	for iter3 := lista.Iterador(); iter3.HaySiguiente(); iter3.Siguiente() {
-		if !primero_eliminado {
-			iter3.Borrar()
-			primero_eliminado = true
-		} else if iter3.VerActual() == 3 {
-			iter3.Borrar()
-		} else if iter3.VerActual() == -7 {
-			iter3.Borrar()
-			break
-		}
+unc TestIteradorExternoVolumenInsertar(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	iter := lista.Iterador()
+
+	for i := 0; i < GRANTAMANIO; i++ {
+		iter.Insertar(i)
+		i++
 	}
 
-	var j int
-	for iter4 := lista.Iterador(); iter4.HaySiguiente(); iter4.Siguiente() {
-		switch j {
-		case 0:
-			require.EqualValues(t, 0, iter4.VerActual(), "Al remover el elemento cuando se crea el iterador, cambia el primer elemento de la lista")
-		case 1:
-			require.EqualValues(t, 2, iter4.VerActual(), "Al remover un elemento del medio, este no esta")
-		case 2:
-			require.EqualValues(t, -1, iter4.VerActual(), "Al remover un elemento del medio, este no esta")
-		case 3:
-			require.EqualValues(t, 9, iter4.VerActual(), "Remover el ultimo elemento con el iterador cambia el ultimo de la lista")
-		}
-		j++
+	for i := 0; i < GRANTAMANIO; i++ {
+		require.EqualValues(t, i, iter.VerActual())
+		iter.Siguiente()
+		i++
 	}
+
+
+ 	
+}
+
+func TestIteradorExternoVolumenBorrar(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	for i := 0; i < GRANTAMANIO; i++ {
+		lista.Insertar(i)
+		i++
+	}
+	
+	iter := lista.Iterador()
+	for  iter.HaySiguiente() {
+		require.EqualValues(t, i, iter.Borrar(i))
+		
+		i--
+	}
+}
+
+
+func TestIteradorExternoBorrarTodos(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+	require.True(t, lista.EstaVacia())
+	lista.InsertarPrimero(3)
+	lista.InsertarPrimero(2)
+	lista.InsertarUltimo(4)
+	lista.InsertarUltimo(5)
+	require.False(t, lista.EstaVacia())
+
+	iter := lista.Iterador()
+	for iter.HaySiguiente() {
+		iter.Borrar()
+	}
+
+	require.True(t, lista.EstaVacia())
+}
+
+func TestIteradorExternoListaVacia(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	iterador := lista.Iterador()
+
+	iterador.Insertar(1)
+
+	require.EqualValues(t, 1, iterador.VerActual())
+	require.EqualValues(t, 1, lista.VerPrimero())
+	require.False(t, lista.EstaVacia())
 
 }
 
+func TestExterno1Elemento(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	require.True(t, lista.EstaVacia())
+	lista.InsertarPrimero(3)
+	iter := lista.Iterador()
+	require.EqualValues(t, 3, iter.Borrar())
+	require.True(t, lista.EstaVacia())
+}
+
+func TestExterno2Elemento(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	require.True(t, lista.EstaVacia())
+	lista.InsertarPrimero(3)
+	lista.InsertarUltimo(4)
+	iter := lista.Iterador()
+	require.EqualValues(t, 3, iter.Borrar(), "fallo esta queen")
+
+	require.EqualValues(t, 4, iter.Borrar(), "falla esta reinas")
+	require.True(t, lista.EstaVacia())
+
+}
+
+func TestIteradorExternoIteracion(t *testing.T) {
+	lista := TDALista.CrearListaEnlazada[int]()
+
+	lista.InsertarPrimero(2)
+	lista.InsertarUltimo(-1)
+	lista.InsertarPrimero(5)
+	lista.InsertarUltimo(7)
+	require.EqualValues(t, 4, lista.Largo())
+	require.False(t, lista.EstaVacia())
+
+	i := 0
+	for iter := lista.Iterador(); iter.HaySiguiente(); iter.Siguiente() {
+		switch i {
+		case 0:
+			require.EqualValues(t, 5, iter.VerActual(), "caso 0")
+		case 1:
+			require.EqualValues(t, 2, iter.VerActual(), "caso 1")
+		case 2:
+			require.EqualValues(t, -1, iter.VerActual(), "caso 2")
+		case 3:
+			require.EqualValues(t, 7, iter.VerActual(), "caso 3")
+		}
+		i++
+	}
+}
 func TestIteradorInternoConCondicionDeCorte(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
@@ -241,3 +335,4 @@ func TestVolumenUltimo(t *testing.T) {
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerPrimero() })
 	require.PanicsWithValue(t, "La lista esta vacia", func() { lista.VerUltimo() })
 }
+
