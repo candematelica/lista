@@ -138,7 +138,7 @@ func TestIteradorExternoInsertarEnListaVacia(t *testing.T) {
 	}
 }
 
-unc TestIteradorExternoVolumenInsertar(t *testing.T) {
+func TestIteradorExternoVolumenInsertar(t *testing.T) {
 	lista := TDALista.CrearListaEnlazada[int]()
 
 	iter := lista.Iterador()
